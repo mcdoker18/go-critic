@@ -2,6 +2,7 @@ package checkers
 
 import (
 	"go/ast"
+	"go/types"
 
 	"github.com/go-critic/go-critic/checkers/internal/astwalk"
 	"github.com/go-critic/go-critic/framework/linter"
@@ -49,6 +50,9 @@ func (c *hugeParamChecker) checkParams(params []*ast.Field) {
 	for _, p := range params {
 		for _, id := range p.Names {
 			typ := c.ctx.TypeOf(id)
+			if _, ok := typ.(*types.TypeParam); ok {
+				continue
+			}
 			size := c.ctx.SizesInfo.Sizeof(typ)
 			if size >= c.sizeThreshold {
 				c.warn(id, size)
