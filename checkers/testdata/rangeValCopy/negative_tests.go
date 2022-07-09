@@ -39,10 +39,3 @@ func bigPointers(xs []*bigObject) int32 {
 	}
 	return v
 }
-
-func genericSlice[T any](original []T, f func(T)) {
-	for _, v := range original {
-		// OK: v is a type parameter.
-		f(v)
-	}
-}
